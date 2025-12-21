@@ -1,0 +1,38 @@
+services:
+
+  legacy-db:
+    image: postgres:15
+    container_name: legacy-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: Legacy_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./DB/legacy_init:/docker-entrypoint-initdb.d
+
+  target-db:
+    image: postgres:15
+    container_name: target-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: Target_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./DB/target_init:/docker-entrypoint-initdb.d
+
+  etl:
+    build:
+      context: ./ETL
+      dockerfile: dockerfile
+    container_name: etl
+    depends_on:
+      - legacy-db
+      - target-db
+    environment:
+      LEGACY_HOST: legacy-db
+      TARGET_HOST: target-db
+    command: ["python", "/app/ETL/etl_pipeline.py"]
