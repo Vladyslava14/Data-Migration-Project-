@@ -32,7 +32,7 @@ def main():
         print(f"Errors: {len(error_log)}")
         print("====================================")
 
-        # якщо були помилки — Java має знати
+      
         if error_log:
             print("Some records failed")
             sys.exit(1)
