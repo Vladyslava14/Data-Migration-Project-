@@ -24,7 +24,7 @@ def parse_date(value):
         except ValueError:
             pass
 
-    # <- Додатково: спроба автоматичного парсингу ISO-дати
+    #спроба автоматичного парсингу ISO-дати
     try:
         return datetime.fromisoformat(value).date()
     except:
